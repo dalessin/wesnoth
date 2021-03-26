@@ -53,6 +53,10 @@ if wesnoth.kernel_type() == "Game Lua Kernel" then
 	wesnoth.zoom = wesnoth.deprecate_api('wesnoth.zoom', 'wesnoth.interface.zoom', 1, nil, wesnoth.interface.zoom)
 	wesnoth.gamestate_inspector = wesnoth.deprecate_api('wesnoth.gamestate_inspector', 'gui.show_inspector', 1, nil, gui.show_inspector)
 	wesnoth.color_adjust = wesnoth.deprecate_api('wesnoth.color_adjust', 'wesnoth.interface.color_adjust', 1, nil, function(cfg) wesnoth.interface.color_adjust(cfg.red, cfg.green, cfg.blue) end)
+	-- wesnoth.wml_actions.print doesn't exist yet at this point, so create a helper function instead.
+	wesnoth.print = wesnoth.deprecate_api('wesnoth.print', 'wesnoth.interface.add_floating_label', 1, nil, function(cfg)
+		wesnoth.wml_actions.print(cfg)
+	end)
 	-- No deprecation for these since since they're not actually public API yet
 	wesnoth.set_menu_item = wesnoth.interface.set_menu_item
 	wesnoth.clear_menu_item = wesnoth.interface.clear_menu_item
