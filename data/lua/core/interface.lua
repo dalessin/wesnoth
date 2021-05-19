@@ -53,6 +53,13 @@ if wesnoth.kernel_type() == "Game Lua Kernel" then
 	wesnoth.zoom = wesnoth.deprecate_api('wesnoth.zoom', 'wesnoth.interface.zoom', 1, nil, wesnoth.interface.zoom)
 	wesnoth.gamestate_inspector = wesnoth.deprecate_api('wesnoth.gamestate_inspector', 'gui.show_inspector', 1, nil, gui.show_inspector)
 	wesnoth.color_adjust = wesnoth.deprecate_api('wesnoth.color_adjust', 'wesnoth.interface.color_adjust', 1, nil, function(cfg) wesnoth.interface.color_adjust(cfg.red, cfg.green, cfg.blue) end)
+	wesnoth.allow_end_turn = wesnoth.deprecate_api('wesnoth.allow_end_turn', 'wesnoth.interface.allow_end_turn', 1, nil, wesnoth.interface.allow_end_turn)
+	wesnoth.allow_undo = wesnoth.deprecate_api('wesnoth.allow_undo', 'wesnoth.interface.allow_undo', 1, nil, wesnoth.interface.allow_undo)
+	wesnoth.cancel_action = wesnoth.deprecate_api('wesnoth.cancel_action', 'wesnoth.interface.cancel_action', 1, nil, wesnoth.interface.cancel_action)
+	wesnoth.clear_messages = wesnoth.deprecate_api('wesnoth.clear_messages', 'wesnoth.interface.clear_messages', 1, nil, wesnoth.interface.clear_messages)
+	wesnoth.end_turn = wesnoth.deprecate_api('wesnoth.end_turn', 'wesnoth.interface.end_turn', 1, nil, wesnoth.interface.end_turn)
+	wesnoth.get_viewing_side = wesnoth.deprecate_api('wesnoth.get_viewing_side', 'wesnoth.interface.get_viewing_side', 1, nil, wesnoth.interface.get_viewing_side)
+	wesnoth.message = wesnoth.deprecate_api('wesnoth.message', 'wesnoth.interface.add_message', 1, nil, wesnoth.interface.add_message)
 	-- wesnoth.wml_actions.print doesn't exist yet at this point, so create a helper function instead.
 	wesnoth.print = wesnoth.deprecate_api('wesnoth.print', 'wesnoth.interface.add_floating_label', 1, nil, function(cfg)
 		wesnoth.wml_actions.print(cfg)
