@@ -4100,11 +4100,6 @@ game_lua_kernel::game_lua_kernel(game_state & gs, play_controller & pc, reports 
 		{ "clear_messages",            &dispatch<&game_lua_kernel::intf_clear_messages             >        },
 		{ "end_turn",                  &dispatch<&game_lua_kernel::intf_end_turn                   >        },
 		{ "end_level",                 &dispatch<&game_lua_kernel::intf_end_level                  >        },
-		{ "find_cost_map",             &dispatch<&game_lua_kernel::intf_find_cost_map              >        },
-		{ "find_path",                 &dispatch<&game_lua_kernel::intf_find_path                  >        },
-		{ "find_reach",                &dispatch<&game_lua_kernel::intf_find_reach                 >        },
-		{ "find_vacant_tile",          &dispatch<&game_lua_kernel::intf_find_vacant_tile           >        },
-		{ "find_vision_range",         &dispatch<&game_lua_kernel::intf_find_vision_range          >        },
 		{ "fire_event",                &dispatch2<&game_lua_kernel::intf_fire_event, false         >        },
 		{ "fire_event_by_id",          &dispatch2<&game_lua_kernel::intf_fire_event, true          >        },
 		{ "get_end_level_data",        &dispatch<&game_lua_kernel::intf_get_end_level_data         >        },
@@ -4346,6 +4341,22 @@ game_lua_kernel::game_lua_kernel(game_state & gs, play_controller & pc, reports 
 	lua_newtable(L);
 	luaL_setfuncs(L, audio_callbacks, 0);
 	lua_setfield(L, -2, "audio");
+	lua_pop(L, 1);
+	
+	// Create the paths module
+	cmd_log_ << "Adding paths module...\n";
+	static luaL_Reg const path_callbacks[] {
+		{ "find_cost_map",             &dispatch<&game_lua_kernel::intf_find_cost_map              >        },
+		{ "find_path",                 &dispatch<&game_lua_kernel::intf_find_path                  >        },
+		{ "find_reach",                &dispatch<&game_lua_kernel::intf_find_reach                 >        },
+		{ "find_vacant_tile",          &dispatch<&game_lua_kernel::intf_find_vacant_tile           >        },
+		{ "find_vision_range",         &dispatch<&game_lua_kernel::intf_find_vision_range          >        },
+		{ nullptr, nullptr }
+	};
+	lua_getglobal(L, "wesnoth");
+	lua_newtable(L);
+	luaL_setfuncs(L, path_callbacks, 0);
+	lua_setfield(L, -2, "paths");
 	lua_pop(L, 1);
 
 	// Create the playlist table with its metatable

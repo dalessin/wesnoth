@@ -107,3 +107,14 @@ wesnoth.set_end_campaign_text = wesnoth.deprecate_api('wesnoth.set_end_campaign_
 		wesnoth.scenario.end_text_duration = d
 	end
 end)
+
+if wesnoth.kernel_type() ~= 'Application Lua Kernel' then
+	wesnoth.find_path = wesnoth.deprecate_api('wesnoth.find_path', 'wesnoth.paths.find_path', 1, nil, wesnoth.paths.find_path)
+end
+
+if wesnoth.kernel_type() == 'Game Lua Kernel' then
+	wesnoth.find_cost_map = wesnoth.deprecate_api('wesnoth.find_cost_map', 'wesnoth.paths.find_cost_map', 1, nil, wesnoth.paths.find_cost_map)
+	wesnoth.find_reach = wesnoth.deprecate_api('wesnoth.find_reach', 'wesnoth.paths.find_reach', 1, nil, wesnoth.paths.find_reach)
+	wesnoth.find_vacant_tile = wesnoth.deprecate_api('wesnoth.find_vacant_tile', 'wesnoth.paths.find_vacant_tile', 1, nil, wesnoth.paths.find_vacant_tile)
+	wesnoth.find_vision_range = wesnoth.deprecate_api('wesnoth.find_vision_range', 'wesnoth.paths.find_vision_range', 1, nil, wesnoth.paths.find_vision_range)
+end
