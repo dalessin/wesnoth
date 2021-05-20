@@ -4089,7 +4089,6 @@ game_lua_kernel::game_lua_kernel(game_state & gs, play_controller & pc, reports 
 		{ "simulate_combat",           &dispatch<&game_lua_kernel::intf_simulate_combat            >        },
 		{ "synchronize_choice",        &intf_synchronize_choice                                             },
 		{ "synchronize_choices",       &intf_synchronize_choices                                            },
-		{ "teleport",                  &dispatch<&game_lua_kernel::intf_teleport                   >        },
 		{ nullptr, nullptr }
 	};lua_getglobal(L, "wesnoth");
 	if (!lua_istable(L,-1)) {
@@ -4253,6 +4252,7 @@ game_lua_kernel::game_lua_kernel(game_state & gs, play_controller & pc, reports 
 		{ "append_ai", &intf_append_ai },
 		{ "debug_ai", &intf_debug_ai },
 		{ "switch_ai", &intf_switch_ai },
+		{ "teleport", &dispatch<&game_lua_kernel::intf_teleport> },
 		// Static functions
 		{ "find", &dispatch<&game_lua_kernel::intf_get_sides> },
 		{ "get", &dispatch<&game_lua_kernel::intf_get_side> },
