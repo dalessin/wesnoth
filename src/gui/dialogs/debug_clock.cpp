@@ -11,7 +11,7 @@
 
    See the COPYING file for more details.
 */
-
+#if 0
 #define GETTEXT_DOMAIN "wesnoth-lib"
 
 #include "gui/dialogs/debug_clock.hpp"
@@ -169,3 +169,4 @@ bool debug_clock::time::step(const unsigned milliseconds)
 }
 
 } // namespace dialogs
+#endif

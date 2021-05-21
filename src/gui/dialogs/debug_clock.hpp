@@ -11,11 +11,11 @@
 
    See the COPYING file for more details.
 */
-
 #pragma once
 
 #include "gui/dialogs/modeless_dialog.hpp"
 
+#if 0
 #include "gui/core/event/dispatcher.hpp"
 
 namespace gui2
@@ -157,3 +157,4 @@ private:
 
 } // namespace dialogs
 } // namespace gui2
+#endif

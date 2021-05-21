@@ -384,13 +384,14 @@ void title_screen::update_tip(const bool previous)
 void title_screen::show_debug_clock_window()
 {
 	assert(show_debug_clock_button);
-
+#if 0
 	if(debug_clock_) {
 		debug_clock_.reset(nullptr);
 	} else {
 		debug_clock_.reset(new debug_clock());
 		debug_clock_->show(true);
 	}
+#endif
 }
 
 void title_screen::hotkey_callback_select_tests()
