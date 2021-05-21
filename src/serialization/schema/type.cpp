@@ -56,13 +56,13 @@ std::shared_ptr<wml_type> wml_type::from_config(const config& cfg)
 	return type;
 }
 
-bool wml_type_simple::matches(const std::string& value, const map&) const
+bool wml_type_simple::matches(const config_attribute_value& value, const map&) const
 {
 	boost::smatch sub;
-	return boost::regex_match(value, sub, pattern_);
+	return boost::regex_match(value.str(), sub, pattern_);
 }
 
-bool wml_type_alias::matches(const std::string& value, const map& type_map) const
+bool wml_type_alias::matches(const config_attribute_value& value, const map& type_map) const
 {
 	if(!cached_) {
 		auto it = type_map.find(link_);
@@ -75,7 +75,7 @@ bool wml_type_alias::matches(const std::string& value, const map& type_map) cons
 	return cached_->matches(value, type_map);
 }
 
-bool wml_type_union::matches(const std::string& value, const map& type_map) const
+bool wml_type_union::matches(const config_attribute_value& value, const map& type_map) const
 {
 	for(const auto& type : subtypes_) {
 		if(type->matches(value, type_map)) {
@@ -85,7 +85,7 @@ bool wml_type_union::matches(const std::string& value, const map& type_map) cons
 	return false;
 }
 
-bool wml_type_intersection::matches(const std::string& value, const map& type_map) const
+bool wml_type_intersection::matches(const config_attribute_value& value, const map& type_map) const
 {
 	for(const auto& type : subtypes_) {
 		if(!type->matches(value, type_map)) {
@@ -95,17 +95,27 @@ bool wml_type_intersection::matches(const std::string& value, const map& type_ma
 	return true;
 }
 
-bool wml_type_list::matches(const std::string& value, const map& type_map) const
+bool wml_type_list::matches(const config_attribute_value& value_attr, const map& type_map) const
 {
+	auto value = value_attr.str();
 	boost::sregex_token_iterator it(value.begin(), value.end(), split_, -1), end;
 	int n = 0;
 	bool result = std::all_of(it, end, [this, &type_map, &n](const boost::ssub_match& match){
 		// Not sure if this is necessary?
 		if(!match.matched) return true;
 		n++;
-		return this->wml_type_union::matches(std::string(match.first, match.second), type_map);
+		config_attribute_value elem;
+		elem = std::string(match.first, match.second);
+		return this->wml_type_union::matches(elem, type_map);
 	});
 	return result && n >= min_ && n <= max_;
+}
+
+bool wml_type_tstring::matches(const config_attribute_value& value, const map& type_map) const
+{
+	return value.apply_visitor([](auto v) {
+		return std::is_same_v<decltype(v), t_string> || std::is_same_v<decltype(v), std::monostate>;
+	});
 }
 
 } // namespace schema_validation
