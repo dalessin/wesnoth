@@ -8,7 +8,7 @@ function validate_core()
     echo "------"
     echo "Validating $NAME..."
     
-    ./wesnoth --validate data/_main.cfg &> temp.log || SUCCESS="No"
+    ./wesnoth --validate data/_main.cfg --preprocess-defines=SCHEMA_SHOULD_SKIP_THIS &> temp.log || SUCCESS="No"
     if [ "$SUCCESS" == "No" ]; then
         echo "$NAME failed validation!"
         cat temp.log
@@ -30,7 +30,7 @@ function validate_misc()
     echo "------"
     echo "Validating $NAME..."
     
-    ./wesnoth --data-dir=. --validate=data/_main.cfg --preprocess-defines=$DEFINE &> temp.log || SUCCESS="No"
+    ./wesnoth --data-dir=. --validate=data/_main.cfg --preprocess-defines=SCHEMA_SHOULD_SKIP_THIS,$DEFINE &> temp.log || SUCCESS="No"
     if [ "$SUCCESS" == "No" ]; then
         echo "$NAME failed validation!"
         cat temp.log
@@ -52,7 +52,7 @@ function validate_schema()
     echo "------"
     echo "Validating schema $NAME..."
     
-    ./wesnoth --data-dir=. --validate-schema=data/schema/$FILE.cfg &> temp.log || SUCCESS="No"
+    ./wesnoth --data-dir=. --validate-schema=data/schema/$FILE.cfg --preprocess-defines=SCHEMA_SHOULD_SKIP_THIS &> temp.log || SUCCESS="No"
     if [ "$SUCCESS" == "No" ]; then
         echo "$NAME failed validation!"
         cat temp.log
@@ -80,7 +80,7 @@ function validate_campaign()
     for DIFFICULTY in ${DIFFICULTIES[@]}; do
         if [ "$SUCCESS" == "Yes" ]; then
             echo "Validating $DIFFICULTY..."
-            ./wesnoth --data-dir=. --validate=data/_main.cfg --preprocess-defines=$DEFINE,$DIFFICULTY &> temp.log || SUCCESS="No"
+            ./wesnoth --data-dir=. --validate=data/_main.cfg --preprocess-defines=SCHEMA_SHOULD_SKIP_THIS,$DEFINE,$DIFFICULTY &> temp.log || SUCCESS="No"
             
             if [ "$SUCCESS" == "No" ]; then
                 echo "$NAME failed $DIFFICULTY validation!"
@@ -109,7 +109,7 @@ validate_schema "WML Diff"     "diff"         || RET=1
 validate_core "Core" || RET=1
 validate_misc "Editor"      "EDITOR" || RET=1
 validate_misc "Multiplayer" "MULTIPLAYER,MULTIPLAYER_A_NEW_LAND_LOAD" || RET=1
-validate_misc "Test"        "TEST,SCHEMA_SHOULD_SKIP_THIS"            || RET=1
+validate_misc "Test"        "TEST"            || RET=1
 validate_misc "World_Conquest" "MULTIPLAYER,LOAD_WC2,LOAD_WC2_EVEN_THOUGH_IT_NEEDS_A_NEW_MAINTAINER" || RET=1
 validate_campaign "Dead_Water"              "CAMPAIGN_DEAD_WATER"              "EASY" "NORMAL" "HARD" "NIGHTMARE" || RET=1
 validate_campaign "Delfadors_Memoirs"       "CAMPAIGN_DELFADORS_MEMOIRS"       "EASY" "NORMAL" "HARD"             || RET=1
