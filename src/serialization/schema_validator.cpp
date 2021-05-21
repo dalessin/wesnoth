@@ -409,7 +409,9 @@ schema_self_validator::schema_self_validator()
 	: schema_validator(filesystem::get_wml_location("schema/schema.cfg"), false)
 	, type_nesting_()
 	, condition_nesting_()
-{}
+{
+	defined_types_.insert("t_string");
+}
 
 void schema_self_validator::open_tag(const std::string& name, const config& parent, int start_line, const std::string& file, bool addition)
 {
