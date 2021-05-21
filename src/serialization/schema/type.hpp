@@ -51,9 +51,11 @@ public:
  */
 class wml_type_simple : public wml_type {
 	boost::regex pattern_;
+	bool allow_translatable_ = false;
 public:
 	wml_type_simple(const std::string& name, const std::string& pattern) : wml_type(name), pattern_(pattern) {}
 	bool matches(const config_attribute_value& value, const map& type_map) const override;
+	void allow_translatable() {allow_translatable_ =  true;}
 };
 
 /**

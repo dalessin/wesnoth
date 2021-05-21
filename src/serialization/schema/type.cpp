@@ -22,6 +22,13 @@
 #include "config.hpp"
 #include <optional>
 
+static bool is_translatable(const config_attribute_value& value)
+{
+	return value.apply_visitor([](auto v) {
+		return std::is_same_v<decltype(v), t_string> || std::is_same_v<decltype(v), std::monostate>;
+	});
+}
+
 namespace schema_validation
 {
 
@@ -43,7 +50,9 @@ std::shared_ptr<wml_type> wml_type::from_config(const config& cfg)
 		type = std::make_shared<wml_type_list>(cfg["name"], list_cfg["split"].str("\\s*,\\s*"), list_min, list_max);
 		composite_range.emplace(list_cfg.child_range("element"));
 	} else if(cfg.has_attribute("value")) {
-		type = std::make_shared<wml_type_simple>(cfg["name"], cfg["value"]);
+		auto t = std::make_shared<wml_type_simple>(cfg["name"], cfg["value"]);
+		if(cfg["allow_translatable"].to_bool()) t->allow_translatable();
+		type = t;
 	} else if(cfg.has_attribute("link")) {
 		type = std::make_shared<wml_type_alias>(cfg["name"], cfg["link"]);
 	}
@@ -58,6 +67,7 @@ std::shared_ptr<wml_type> wml_type::from_config(const config& cfg)
 
 bool wml_type_simple::matches(const config_attribute_value& value, const map&) const
 {
+	if(!allow_translatable_ && is_translatable(value)) return false;
 	boost::smatch sub;
 	return boost::regex_match(value.str(), sub, pattern_);
 }
@@ -113,9 +123,7 @@ bool wml_type_list::matches(const config_attribute_value& value_attr, const map&
 
 bool wml_type_tstring::matches(const config_attribute_value& value, const map& type_map) const
 {
-	return value.apply_visitor([](auto v) {
-		return std::is_same_v<decltype(v), t_string> || std::is_same_v<decltype(v), std::monostate>;
-	});
+	return is_translatable(value);
 }
 
 } // namespace schema_validation
