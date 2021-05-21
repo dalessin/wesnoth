@@ -121,7 +121,7 @@ bool wml_type_list::matches(const config_attribute_value& value_attr, const map&
 	return result && n >= min_ && n <= max_;
 }
 
-bool wml_type_tstring::matches(const config_attribute_value& value, const map& type_map) const
+bool wml_type_tstring::matches(const config_attribute_value& value, const map&) const
 {
 	return is_translatable(value);
 }
