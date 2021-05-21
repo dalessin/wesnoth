@@ -2236,10 +2236,6 @@ to be called on their own".format(filename, num))
                 pass
             elif key in ('name', 'male_name', 'female_name', 'value'): # FIXME: check this someday
                 pass
-            elif key == "variation_name":
-                if markcheck and not has_tr_mark:
-                    print('"%s", line %d: %s should be renamed as variation_id and/or marked as translatable' \
-                          % (filename, i+1, key))
             elif has_tr_mark:
                 if markcheck and has_tr_mark and '""' in lines[i]:
                     print('"%s", line %d: %s doesn`t need translation mark (translatable string is empty)' \
